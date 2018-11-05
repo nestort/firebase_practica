@@ -1,16 +1,24 @@
 var provider = new firebase.auth.GoogleAuthProvider();
-
-$('#inicioSesion').click(
-    
+var usuario
+$('#inicioSesion').click(    
     function(result){
         //firebase.auth.signInWithPopup(provider).then(    <=faltaba ()
-        firebase.auth().signInWithPopup(provider).then(
-        
+        firebase.auth().signInWithPopup(provider).then(        
             function(result){
-                console.log(result);
+                usuario = {
+                    nombre: result.user.displayName,
+                    uid: result.user.uid,
+                    email: result.user.email,
+                    foto: result.user.photoURL,
+                    termino:true,
+                    puntos:0
+                };   
+                $('#seccionSesion').hide();
+                firebase.database().ref('Usuarios/' + usuario.uid).set(usuario);
+                           
             }
-
 
         );
     }
 );
+
